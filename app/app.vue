@@ -13,9 +13,9 @@ useHead({
 });
 
 useSeoMeta({
-  title: () => 'BMad Blackjack',
+  title: () => t('landing.metaTitle'),
   description: () => t('landing.metaDescription'),
-  ogTitle: () => 'BMad Blackjack',
+  ogTitle: () => t('landing.metaTitle'),
   ogDescription: () => t('landing.metaDescription'),
   twitterCard: 'summary_large_image'
 });
@@ -66,7 +66,7 @@ useSeoMeta({
         <div class="flex flex-col gap-6">
           <AppLogo class="h-8 opacity-90 transition-opacity hover:opacity-100" />
           <p class="text-sm text-ivory/40 max-w-sm leading-relaxed">
-            BMad Blackjack est une plateforme d'apprentissage immersive des probabilités. Prenez les meilleures décisions, développez votre instinct et devenez un joueur expert.
+            EV21 est une plateforme d'apprentissage immersive des probabilités. Prenez les meilleures décisions, développez votre instinct et devenez un joueur expert en Blackjack.
           </p>
           <div class="flex gap-4">
             <UButton icon="i-simple-icons-github" color="neutral" variant="ghost" size="sm" class="text-ivory/40 hover:text-ivory" />
@@ -90,7 +90,7 @@ useSeoMeta({
       
       <div class="mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl mt-16 pt-8 border-t border-white/5 flex justify-between items-center">
         <p class="text-xs text-ivory/20 font-mono">
-          &copy; {{ new Date().getFullYear() }} BMad Blackjack. Built for Mathematics.
+          &copy; {{ new Date().getFullYear() }} EV21. Built for Mathematics.
         </p>
         <div class="flex items-center gap-2">
           <div class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></div>

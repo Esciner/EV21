@@ -4,8 +4,8 @@
       <UIcon name="i-lucide-spade" class="text-black text-xl" />
     </div>
     <div class="flex flex-col leading-none">
-      <span class="text-lg font-bold tracking-tight text-ivory">BMad</span>
-      <span class="text-[10px] font-bold text-gold uppercase tracking-[0.2em]">Blackjack</span>
+      <span class="text-xl font-bold tracking-tight text-ivory">EV21</span>
+      <span class="text-[9px] font-bold text-gold uppercase tracking-[0.2em]">Blackjack</span>
     </div>
   </div>
 </template>
