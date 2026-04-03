@@ -1,7 +1,9 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import { GamePhase } from '~/types/game';
+import { computed } from 'vue'
+import { GamePhase } from '~/types/game'
 import BmadCard from '~/components/game/BmadCard.vue'
+import CasinoActionButton from '~/components/game/CasinoActionButton.vue'
+import BettingControls from '~/components/game/BettingControls.vue'
 
 const { t } = useI18n();
 
@@ -17,21 +19,9 @@ onMounted(async () => {
   await configStore.loadConfig();
 });
 
-// Mock state for the UI story
-const dealerCards = ref<{suit: 'hearts' | 'diamonds' | 'clubs' | 'spades', value: string, isFaceUp: boolean}[]>([])
-const playerCards = ref<{suit: 'hearts' | 'diamonds' | 'clubs' | 'spades', value: string, isFaceUp: boolean}[]>([])
-
-const dealMockCards = () => {
-  dealerCards.value = [
-    { suit: 'spades', value: 'hidden', isFaceUp: false },
-    { suit: 'hearts', value: 'K', isFaceUp: true }
-  ];
-  playerCards.value = [
-    { suit: 'diamonds', value: '10', isFaceUp: true },
-    { suit: 'clubs', value: 'A', isFaceUp: true }
-  ];
-  gameStore.setPhase(GamePhase.PLAYER_TURN)
-}
+const isPlayerTurn = computed(() => gameStore.currentPhase === GamePhase.PLAYER_TURN);
+const canDouble = computed(() => isPlayerTurn.value && gameStore.playerHandCards.length === 2);
+const isBettingPhase = computed(() => gameStore.currentPhase === GamePhase.IDLE || gameStore.currentPhase === GamePhase.PAYOUT);
 </script>
 
 <template>
@@ -67,10 +57,10 @@ const dealMockCards = () => {
         <div class="dealer-area w-full min-h-[140px] flex justify-center items-center py-4">
           <TransitionGroup name="deal" tag="div" class="flex justify-center -space-x-8">
             <BmadCard 
-              v-for="(card, idx) in dealerCards" 
+              v-for="(card, idx) in gameStore.dealerHandCards" 
               :key="'dealer-'+idx" 
               :suit="card.suit" 
-              :value="card.value" 
+              :value="card.rank" 
               :isFaceUp="card.isFaceUp" 
             />
           </TransitionGroup>
@@ -87,10 +77,10 @@ const dealMockCards = () => {
         <div class="player-area w-full min-h-[140px] flex justify-center items-center py-4">
           <TransitionGroup name="deal" tag="div" class="flex justify-center -space-x-8">
             <BmadCard 
-              v-for="(card, idx) in playerCards" 
+              v-for="(card, idx) in gameStore.playerHandCards" 
               :key="'player-'+idx" 
               :suit="card.suit" 
-              :value="card.value" 
+              :value="card.rank" 
               :isFaceUp="card.isFaceUp" 
             />
           </TransitionGroup>
@@ -102,21 +92,32 @@ const dealMockCards = () => {
       <div class="footer-area bg-black/60 pt-4 pb-6 px-4">
         <!-- Zone 5: Action Buttons (80px) -->
         <div class="action-buttons w-full min-h-[80px] flex items-center justify-center gap-4">
-          <template v-if="gameStore.currentPhase === GamePhase.IDLE">
-            <UButton class="bg-gold text-black hover:bg-gold-light font-bold" size="xl" @click="dealMockCards">
-              DEAL CARDS
-            </UButton>
-          </template>
-          <template v-else>
-            <UButton class="bg-blue-600 text-white" size="lg">HIT</UButton>
-            <UButton class="bg-red-600 text-white" size="lg">STAND</UButton>
-            <UButton class="bg-gray-600 text-white" size="lg">RESET</UButton>
-          </template>
+          <CasinoActionButton 
+            :label="t('game.hit') || 'Hit'" 
+            action="hit" 
+            :disabled="!isPlayerTurn"
+            @action="gameStore.hit()" />
+          <CasinoActionButton 
+            :label="t('game.stand') || 'Stand'" 
+            action="stand" 
+            variant="danger"
+            :disabled="!isPlayerTurn"
+            @action="gameStore.stand()" />
+          <CasinoActionButton 
+            :label="t('game.double') || 'Double'" 
+            action="double" 
+            variant="secondary"
+            :disabled="!canDouble"
+            @action="gameStore.double()" />
         </div>
 
         <!-- Zone 6: Betting Controls (60px) -->
-        <div class="betting-controls w-full min-h-[60px] flex justify-center items-center mt-2 opacity-50">
-          <div class="text-xs">Betting controls placeholder</div>
+        <div class="betting-controls w-full min-h-[60px] flex justify-center items-center mt-2 relative">
+           <!-- Overlay to disable interactions when not betting phase without causing layout shift -->
+           <div v-if="!isBettingPhase" class="absolute inset-0 z-10 bg-black/40 cursor-not-allowed"></div>
+           <BettingControls
+             @deal="(amount: number) => { gameStore.setBet(amount); gameStore.deal(); }"
+           />
         </div>
       </div>
       

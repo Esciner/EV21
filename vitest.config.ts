@@ -5,8 +5,7 @@ export default defineVitestConfig({
     exclude: [
       'tests/e2e/**',
       'node_modules/**'
-    ]
-    environment: 'happy-dom',
-    exclude: ['node_modules', 'tests/e2e/**']
+    ],
+    environment: 'happy-dom'
   }
 })
