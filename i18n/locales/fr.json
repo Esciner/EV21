@@ -1,0 +1,27 @@
+{
+  "landing": {
+    "title": "Bienvenue sur BMad Blackjack",
+    "description": "Apprenez à prendre les meilleures décisions mathématiques, pas seulement à avoir de la chance.",
+    "cta": "Jouer Maintenant",
+    "metaTitle": "BMad Blackjack - Apprendre la Probabilité",
+    "metaDescription": "Maîtrisez le Blackjack et la théorie des jeux grâce à notre simulateur basé sur l'Expected Value (EV)."
+  },
+  "features": {
+    "evTitle": "Apprentissage par l'EV",
+    "evDesc": "Chaque décision est évaluée en temps réel selon la valeur attendue (Expected Value).",
+    "riskTitle": "Sans Risque",
+    "riskDesc": "Utilisez une monnaie virtuelle et apprenez les bases sans aucun risque financier.",
+    "guideTitle": "Progression Guidée",
+    "guideDesc": "Passez du niveau débutant au mode expert avec des conseils personnalisés."
+  },
+  "game": {
+    "balance": "Solde",
+    "level": "Niveau",
+    "tableTitle": "Table de Blackjack",
+    "readyToPlay": "Prêt à jouer ? Placez votre mise.",
+    "phase": "PHASE",
+    "start": "COMMENCER",
+    "loading": "Chargement...",
+    "error": "Erreur"
+  }
+}
