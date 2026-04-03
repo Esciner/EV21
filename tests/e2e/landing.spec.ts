@@ -1,18 +1,18 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from '@playwright/test'
 
 test.describe('Landing Page', () => {
   test.beforeEach(async ({ page }) => {
     // The application serves French at the root by default
-    await page.goto('/');
-  });
+    await page.goto('/')
+  })
 
   test('should display the main title', async ({ page }) => {
-    await expect(page.locator('h1')).toContainText(/Blackjack/i);
-  });
+    await expect(page.locator('h1')).toContainText(/Blackjack/i)
+  })
 
   test('should navigate to the game page', async ({ page }) => {
     // Pick the first 'Jouer Maintenant' button visible (Header or Body)
-    await page.getByRole('link', { name: /Jouer/i }).first().click();
-    await expect(page).toHaveURL(/\/game/);
-  });
-});
+    await page.getByRole('link', { name: /Jouer/i }).first().click()
+    await expect(page).toHaveURL(/\/game/)
+  })
+})

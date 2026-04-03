@@ -11,7 +11,7 @@ describe('BmadCard', () => {
         isFaceUp: true
       }
     })
-    
+
     expect(component.html()).toContain('A')
     expect(component.html()).toContain('♥')
   })
@@ -24,7 +24,7 @@ describe('BmadCard', () => {
         isFaceUp: false
       }
     })
-    
+
     // HTML still contains the value, but the flip class is omitted
     expect(component.html()).not.toContain('[transform:rotateY(180deg)]" data-v')
   })

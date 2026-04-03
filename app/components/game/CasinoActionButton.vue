@@ -4,8 +4,8 @@
       'min-w-[48px] min-h-[48px] px-4 py-2 rounded-lg font-bold transition-transform duration-75',
       'flex items-center justify-center',
       'focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2',
-      disabled 
-        ? 'opacity-50 cursor-not-allowed bg-gray-600 text-gray-300' 
+      disabled
+        ? 'opacity-50 cursor-not-allowed bg-gray-600 text-gray-300'
         : 'active:scale-95 hover:brightness-110 cursor-pointer',
       variantClasses
     ]"

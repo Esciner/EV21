@@ -10,7 +10,7 @@ describe('useDeck', () => {
   it('draws a card and sets face-up state correctly', () => {
     const { deck, drawCard } = useDeck()
     const initialDeckLength = deck.value.length
-    
+
     // Draw face down
     const card1 = drawCard(false)
     expect(card1).toBeDefined()
@@ -27,7 +27,7 @@ describe('useDeck', () => {
     const { deck, drawCard } = useDeck()
     // draw all 52 cards
     for (let i = 0; i < 52; i++) {
-        drawCard()
+      drawCard()
     }
     expect(deck.value).toHaveLength(0)
     expect(() => drawCard()).toThrowError('Deck is empty')

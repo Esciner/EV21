@@ -22,6 +22,10 @@
     "phase": "PHASE",
     "start": "COMMENCER",
     "loading": "Chargement...",
-    "error": "Erreur"
+    "error": "Erreur",
+    "hit": "Tirer",
+    "stand": "Rester",
+    "double": "Doubler",
+    "deal": "Distribuer"
   }
 }

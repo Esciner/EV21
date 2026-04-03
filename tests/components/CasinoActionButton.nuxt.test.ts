@@ -10,7 +10,7 @@ describe('CasinoActionButton', () => {
         action: 'hit'
       }
     })
-    
+
     expect(component.text()).toContain('Hit')
     expect(component.classes()).toContain('min-w-[48px]')
     expect(component.classes()).toContain('min-h-[48px]')
@@ -25,7 +25,7 @@ describe('CasinoActionButton', () => {
         disabled: true
       }
     })
-    
+
     const button = component.find('button')
     expect(button.attributes('disabled')).toBeDefined()
     expect(button.classes()).toContain('opacity-50')
@@ -39,7 +39,7 @@ describe('CasinoActionButton', () => {
         action: 'hit'
       }
     })
-    
+
     await component.trigger('click')
     const emitted = component.emitted('action')
     expect(emitted).toBeTruthy()

@@ -23,13 +23,13 @@ vi.mock('../composables/useDeck', () => ({
         // Stack: player1, dealer1, player2, dealer2, hit/double card, dealer-hit cards...
         // Cards are popped (LIFO), so we push in reverse order
         cards = [
-          makeCard('7', 7, 'clubs'),     // Extra dealer hit card (if needed)
-          makeCard('6', 6, 'clubs'),     // Extra dealer hit card (16 -> hit)
-          makeCard('5', 5, 'spades'),    // Card 5: hit/double card for player
+          makeCard('7', 7, 'clubs'), // Extra dealer hit card (if needed)
+          makeCard('6', 6, 'clubs'), // Extra dealer hit card (16 -> hit)
+          makeCard('5', 5, 'spades'), // Card 5: hit/double card for player
           makeCard('K', 10, 'diamonds'), // Card 4: dealer hole card (face-down)
-          makeCard('8', 8, 'hearts'),    // Card 3: player second card
-          makeCard('6', 6, 'clubs'),     // Card 2: dealer up card
-          makeCard('9', 9, 'hearts'),    // Card 1: player first card
+          makeCard('8', 8, 'hearts'), // Card 3: player second card
+          makeCard('6', 6, 'clubs'), // Card 2: dealer up card
+          makeCard('9', 9, 'hearts') // Card 1: player first card
         ]
       },
       drawCard: (faceUp: boolean) => {
@@ -57,17 +57,17 @@ describe('useGameStore', () => {
   it('deals cards correctly and enters PLAYER_TURN', () => {
     const store = useGameStore()
     store.deal()
-    
+
     // Player: 9♥ + 8♥ = 17, Dealer: 6♣ + K♦(hidden)
     expect(store.playerHandCards.length).toBe(2)
     expect(store.dealerHandCards.length).toBe(2)
-    
+
     expect(store.playerHandCards[0]!.isFaceUp).toBe(true)
     expect(store.playerHandCards[1]!.isFaceUp).toBe(true)
-    
+
     expect(store.dealerHandCards[0]!.isFaceUp).toBe(true)
     expect(store.dealerHandCards[1]!.isFaceUp).toBe(false)
-    
+
     expect(store.currentPhase).toBe(GamePhase.PLAYER_TURN)
     expect(store.playerHand.total).toBe(17)
   })
@@ -89,7 +89,7 @@ describe('useGameStore', () => {
   it('only allows deal from IDLE or PAYOUT', () => {
     const store = useGameStore()
     store.deal() // IDLE -> PLAYER_TURN
-    
+
     const cardsBefore = store.playerHandCards.length
     store.deal() // Should be rejected — we are in PLAYER_TURN
     expect(store.playerHandCards.length).toBe(cardsBefore) // No change
@@ -102,7 +102,7 @@ describe('useGameStore', () => {
     // Player: 9♥ + 8♥ = 17
     store.hit()
     // Player gets 5♠ -> 17 + 5 = 22 -> BUST
-    
+
     expect(store.playerHandCards.length).toBe(3)
     expect(store.playerHand.total).toBe(22)
     expect(store.playerHand.isBust).toBe(true)
@@ -115,7 +115,7 @@ describe('useGameStore', () => {
     store.deal()
     // Player: 17, Dealer: 6♣ + K♦ = 16 -> dealer must hit
     store.stand()
-    
+
     expect(store.dealerHandCards[1]!.isFaceUp).toBe(true)
     expect(store.currentPhase).toBe(GamePhase.PAYOUT)
     expect(store.dealerHand.total).toBeGreaterThanOrEqual(17)
@@ -128,7 +128,7 @@ describe('useGameStore', () => {
     store.setBet(100)
     // Player: 9♥ + 8♥ = 17, gets 5♠ -> 22 -> BUST
     store.double()
-    
+
     expect(store.currentBet).toBe(200)
     expect(store.playerHandCards.length).toBe(3)
     expect(store.playerHand.total).toBe(22)
@@ -142,7 +142,7 @@ describe('useGameStore', () => {
     store.setBet(100)
     store.deal()
     store.stand() // Finish hand -> PAYOUT
-    
+
     // Deal again from PAYOUT
     store.deal()
     expect(store.currentBet).toBe(0)

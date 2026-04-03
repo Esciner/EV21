@@ -12,8 +12,6 @@ export default defineNuxtConfig({
     enabled: true
   },
 
-  css: ['~/assets/css/main.css'],
-
   app: {
     head: {
       link: [
@@ -24,20 +22,11 @@ export default defineNuxtConfig({
     }
   },
 
+  css: ['~/assets/css/main.css'],
+
   routeRules: {
     '/': { prerender: true },
     '/game': { ssr: false }
-  },
-
-  i18n: {
-    locales: [
-      { code: 'fr', file: 'fr.json' },
-      { code: 'nl', file: 'nl.json' },
-      { code: 'en', file: 'en.json' },
-      { code: 'de', file: 'de.json' }
-    ],
-    defaultLocale: 'fr',
-    langDir: 'locales'
   },
 
   future: {
@@ -53,5 +42,16 @@ export default defineNuxtConfig({
         braceStyle: '1tbs'
       }
     }
+  },
+
+  i18n: {
+    locales: [
+      { code: 'fr', file: 'fr.json' },
+      { code: 'nl', file: 'nl.json' },
+      { code: 'en', file: 'en.json' },
+      { code: 'de', file: 'de.json' }
+    ],
+    defaultLocale: 'fr',
+    langDir: 'locales'
   }
 })

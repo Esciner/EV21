@@ -1,5 +1,11 @@
 {
   "landing": {
     "title": "Willkommen bei BMad Blackjack"
+  },
+  "game": {
+    "hit": "Ziehen",
+    "stand": "Halten",
+    "double": "Verdoppeln",
+    "deal": "Geben"
   }
 }

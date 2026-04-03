@@ -1,11 +1,11 @@
 import { describe, it, expect } from 'vitest'
 import { useHandResolver } from './useHandResolver'
-import type { Card, Hand } from '../types/game'
+import type { Card, Hand, Rank } from '../types/game'
 
 describe('useHandResolver', () => {
   const { calculateHand, computeWinner } = useHandResolver()
 
-  const createCard = (rank: any, value: number): Card => ({
+  const createCard = (rank: Rank, value: number): Card => ({
     suit: 'hearts',
     rank,
     value,
@@ -68,43 +68,43 @@ describe('useHandResolver', () => {
 
   describe('computeWinner', () => {
     const createHand = (cards: Card[]): Hand => calculateHand(cards)
-    
+
     it('player busts -> dealer wins', () => {
       const player = createHand([createCard('10', 10), createCard('10', 10), createCard('5', 5)])
       const dealer = createHand([createCard('10', 10), createCard('6', 6)])
       expect(computeWinner(player, dealer)).toBe('dealer-win')
     })
-    
+
     it('player has blackjack -> player-blackjack', () => {
       const player = createHand([createCard('A', 11), createCard('K', 10)])
       const dealer = createHand([createCard('10', 10), createCard('6', 6)])
       expect(computeWinner(player, dealer)).toBe('player-blackjack')
     })
-    
+
     it('both have blackjack -> push', () => {
       const player = createHand([createCard('A', 11), createCard('K', 10)])
       const dealer = createHand([createCard('A', 11), createCard('Q', 10)])
       expect(computeWinner(player, dealer)).toBe('push')
     })
-    
+
     it('dealer busts -> player wins', () => {
       const player = createHand([createCard('10', 10), createCard('6', 6)])
       const dealer = createHand([createCard('10', 10), createCard('10', 10), createCard('5', 5)])
       expect(computeWinner(player, dealer)).toBe('player-win')
     })
-    
+
     it('player has higher total -> player wins', () => {
       const player = createHand([createCard('10', 10), createCard('9', 9)])
       const dealer = createHand([createCard('10', 10), createCard('8', 8)])
       expect(computeWinner(player, dealer)).toBe('player-win')
     })
-    
+
     it('dealer has higher total -> dealer wins', () => {
       const player = createHand([createCard('10', 10), createCard('8', 8)])
       const dealer = createHand([createCard('10', 10), createCard('9', 9)])
       expect(computeWinner(player, dealer)).toBe('dealer-win')
     })
-    
+
     it('same total -> push', () => {
       const player = createHand([createCard('10', 10), createCard('8', 8)])
       const dealer = createHand([createCard('10', 10), createCard('8', 8)])

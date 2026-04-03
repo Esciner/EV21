@@ -1,5 +1,11 @@
 {
   "landing": {
     "title": "Welkom bij BMad Blackjack"
+  },
+  "game": {
+    "hit": "Kaart",
+    "stand": "Passen",
+    "double": "Dubbel",
+    "deal": "Delen"
   }
 }

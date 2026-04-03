@@ -8,3 +8,5 @@
 ## Deferred from: code review of 1-2-card-rendering-table-layout (2026-04-03)
 - Horizontal Overflow on large hands [game.vue] — design limit for multiple stacked cards on mobile not fully spec'd.
 
+## Deferred from: code review of 1-4-action-buttons-betting-controls (2026-04-03)
+- Double condition might allow doubling after a split [game.vue:20] — canDouble only checks if playerHandCards.length === 2. If the user splits and gets a second card, length is 2. The logic might need to ensure it's the initial turn. Currently, split is not implemented, so this is a future consideration.

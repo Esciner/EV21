@@ -22,6 +22,10 @@
     "phase": "PHASE",
     "start": "START",
     "loading": "Loading...",
-    "error": "Error"
+    "error": "Error",
+    "hit": "Hit",
+    "stand": "Stand",
+    "double": "Double",
+    "deal": "Deal"
   }
 }

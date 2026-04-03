@@ -47,7 +47,7 @@ export const useGameStore = defineStore('game', () => {
     // Transition through BETTING phase (transient — Story 1-4 will add UI interaction here)
     setPhase(GamePhase.BETTING)
     setPhase(GamePhase.DEALING)
-    
+
     deckParams.shuffle()
     playerHandCards.value.push(deckParams.drawCard(true))
     dealerHandCards.value.push(deckParams.drawCard(true))
@@ -59,25 +59,25 @@ export const useGameStore = defineStore('game', () => {
 
   const resolveHand = () => {
     setPhase(GamePhase.RESOLVING)
-    
+
     // Ensure dealer hidden card is revealed
     if (dealerHandCards.value.length >= 2) {
       dealerHandCards.value[1]!.isFaceUp = true
     }
 
     result.value = resolver.computeWinner(playerHand.value, dealerHand.value)
-    
+
     setPhase(GamePhase.PAYOUT)
   }
 
   const executeDealerTurn = () => {
     setPhase(GamePhase.DEALER_TURN)
-    
+
     // Reveal hidden card
     if (dealerHandCards.value.length >= 2) {
       dealerHandCards.value[1]!.isFaceUp = true
     }
-    
+
     // Hit on 16, stand on 17
     while (dealerHand.value.total < 17) {
       dealerHandCards.value.push(deckParams.drawCard(true))
@@ -90,7 +90,7 @@ export const useGameStore = defineStore('game', () => {
     if (currentPhase.value !== GamePhase.PLAYER_TURN) return
 
     playerHandCards.value.push(deckParams.drawCard(true))
-    
+
     if (playerHand.value.isBust) {
       resolveHand()
     }
@@ -103,10 +103,10 @@ export const useGameStore = defineStore('game', () => {
 
   const double = () => {
     if (currentPhase.value !== GamePhase.PLAYER_TURN || playerHandCards.value.length !== 2) return
-    
+
     currentBet.value *= 2
     playerHandCards.value.push(deckParams.drawCard(true))
-    
+
     if (playerHand.value.isBust) {
       resolveHand()
     } else {

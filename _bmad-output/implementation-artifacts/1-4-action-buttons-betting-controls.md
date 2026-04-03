@@ -1,6 +1,6 @@
 # Story 1.4: Action Buttons & Betting Controls
 
-Status: review
+Status: done
 
 ## Story
 
@@ -80,3 +80,10 @@ Gemini 3.1 Pro (High)
 - `tests/components/CasinoActionButton.nuxt.test.ts` [NEW]
 - `tests/components/BettingControls.nuxt.test.ts` [NEW]
 - `vitest.config.ts` [MODIFY]
+
+### Review Findings
+
+- [x] [Review][Patch] BettingControls overlay blocks mouse but not keyboard focus [app/pages/game.vue:100]
+- [x] [Review][Patch] useI18n fallback syntax is incorrect [app/components/game/BettingControls.vue:32]
+- [x] [Review][Patch] Buttons have 16px gap instead of specified 8px [app/pages/game.vue:94]
+- [x] [Review][Defer] Double condition might allow doubling after a split [app/pages/game.vue:20] — deferred, pre-existing
