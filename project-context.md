@@ -26,6 +26,14 @@ All BMad agents MUST strictly adhere to the Gitflow workflow when implementing s
   - Types allowed: `feat:`, `fix:`, `chore:`, `docs:`, `style:`, `refactor:`, `test:`
   - *Example: `feat(ui): implement 3D card flip animation`*
 
+### 3. AI Agent Workflow Process (AI-Native TDD Pipeline)
+To ensure maximum quality, consistency, and zero regressions, this project strictly enforces an **AI-Native Test-Driven Development (TDD) and Acceptance Test-Driven Development (ATDD)** pipeline. Feature implementation MUST follow this sequence carefully:
+
+1. **Phase 1: Architecture & UX Specs**: Launch a Design/Architecture Agent (e.g., `bmad-agent-ux-designer` or `bmad-agent-architect`) to finalize the feature's specifications, components, and technical boundaries.
+2. **Phase 2: Test-Driven Design (RED)**: Launch a Test Architect/QA Agent (e.g., `bmad-tea` or `bmad-testarch-atdd`) to write failing Unit, API, and E2E tests based on the approved specifications. Do NOT write application code yet.
+3. **Phase 3: Development (GREEN)**: Launch a Development Agent (e.g., `bmad-agent-dev` or `bmad-quick-dev`) and instruct them to write the minimum code necessary to make the tests pass. If the development agent needs to change the tests, they must explain why.
+4. **Phase 4: Refactor, Code Review & Coverage (REFACTOR)**: Launch a QA or Review Agent (e.g., `bmad-code-review` or `bmad-agent-qa`) to look for edge cases (`bmad-review-edge-case-hunter`), optimize the system, refactor the application, and ensure 100% test coverage.
+
 ## 🏗️ Architecture & Tech Stack
 - **Framework**: Nuxt 4 (Vue 3)
 - **Styling**: Tailwind CSS v4. 
