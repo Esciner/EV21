@@ -19,7 +19,15 @@ All BMad agents MUST strictly adhere to the Gitflow workflow when implementing s
   3. Work is performed and committed on this feature branch.
   4. (MANDATORY) At the end of the dev and test pipeline, you must push your branch and open a Merge Request (Pull Request) on GitHub targeting `develop`. You MUST link the corresponding GitHub Issue in the MR description (e.g. by adding "Resolves #X") to track progress.
 
-### 2. Semantic Versioning (SemVer) & Conventional Commits
+### 2. Sprint Status Tracking (MANDATORY)
+All BMad agents MUST update `_bmad-output/implementation-artifacts/sprint-status.yaml` at **every workflow transition**. Status changes are not optional — they are a required deliverable of each phase:
+- When **starting development** on a story → set status to `in-progress`
+- When **development is complete** and requesting code review → set status to `review`
+- When **code review passes** and story is validated → set status to `done`
+- When **QA testing begins** (if applicable) → annotate or update status accordingly
+- **Failure to update status is a workflow violation.** Agents must self-check status accuracy before ending any task.
+
+### 3. Semantic Versioning (SemVer) & Conventional Commits
 - The project strictly follows Semantic Versioning for releases.
 - **ALL commits MUST follow the Conventional Commits specification:**
   - Format: `<type>[optional scope]: <description>`
