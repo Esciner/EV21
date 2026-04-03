@@ -1,6 +1,6 @@
 # Story 1.3: Core Blackjack Game Engine
 
-Status: ready-for-dev
+Status: done
 
 ## Story
 
@@ -46,16 +46,44 @@ app/
 
 ## Tasks / Subtasks
 
-- [ ] Task 1: Create Deck Composable (AC 1)
-  - Implement `useDeck` with Fisher-Yates.
-  - Write `useDeck.test.ts`.
-- [ ] Task 2: Implement Hand Resolution (AC 3, 5)
-  - Implement `useHandResolver.ts` logic to compute values safely (handling Aces as 1/11).
-  - Write `useHandResolver.test.ts` to cover soft/hard hands and edge cases.
-- [ ] Task 3: Build Game Store state machine (AC 1, 2, 3, 4)
-  - Hook logic for "Deal", "Hit", "Stand", "Double" actions in `useGameStore.ts`.
-  - Handle busts synchronously.
+- [x] Task 1: Create Deck Composable (AC 1)
+  - [x] Implement `useDeck` with Fisher-Yates.
+  - [x] Write `useDeck.test.ts`.
+- [x] Task 2: Implement Hand Resolution (AC 3, 5)
+  - [x] Implement `useHandResolver.ts` logic to compute values safely (handling Aces as 1/11).
+  - [x] Write `useHandResolver.test.ts` to cover soft/hard hands and edge cases.
+- [x] Task 3: Build Game Store state machine (AC 1, 2, 3, 4)
+  - [x] Hook logic for "Deal", "Hit", "Stand", "Double" actions in `useGameStore.ts`.
+  - [x] Handle busts synchronously.
 
 ## Dev Agent Record
 
 Ultimate context engine analysis completed - comprehensive developer guide created.
+
+### Completion Notes
+✅ `useDeck.ts` with Fisher-Yates implementation completed.
+✅ `useHandResolver.ts` logic for exact evaluation of soft/hard Hands and Winner logic completed.
+✅ `useGameStore.ts` refactored as a Setup Store inside Pinia, managing IDLE -> BETTING -> DEALING -> PLAYER_TURN -> DEALER_TURN -> RESOLVING -> PAYOUT correctly.
+
+### File List
+- `app/composables/useDeck.ts` [NEW]
+- `app/composables/useDeck.test.ts` [NEW]
+- `app/composables/useHandResolver.ts` [NEW]
+- `app/composables/useHandResolver.test.ts` [NEW]
+- `app/stores/useGameStore.ts` [MODIFIED]
+- `app/stores/useGameStore.test.ts` [NEW]
+
+### Change Log
+- Added `useDeck`, `useHandResolver` logic.
+- Rewrote `useGameStore` to Setup Store to seamlessly integrate composables.
+- Added comprehensive unit tests for deck, hand evaluation, and Vue Pinia game state execution. Tested locally via `vitest` with 100% pass rate.
+
+### Review Findings
+
+- [x] [Review][Decision] **BETTING phase skipped in state machine** — Resolved: added transient BETTING phase transition in `deal()`
+- [x] [Review][Patch] **`deal()` has no phase guard** — Fixed: guard added (IDLE or PAYOUT only) [useGameStore.ts:42]
+- [x] [Review][Patch] **Non-deterministic store tests** — Fixed: mocked `useDeck` for deterministic cards [useGameStore.test.ts]
+- [x] [Review][Patch] **`deal()` doesn't reset `currentBet`** — Fixed: `currentBet` reset to 0 in `deal()` [useGameStore.ts:45]
+- [x] [Review][Patch] **Vitest picks up Playwright E2E files** — Fixed: created `vitest.config.ts` with E2E exclusion
+- [x] [Review][Defer] **`dealerHand.total` exposes hidden card** [useGameStore.ts:19] — deferred, UI layer concern for future story
+- [x] [Review][Defer] **Deck exhaustion during dealer turn** [useGameStore.ts:78-80] — deferred, near-impossible with single deck
