@@ -26,6 +26,7 @@
     "hit": "Tirer",
     "stand": "Rester",
     "double": "Doubler",
-    "deal": "Distribuer"
+    "deal": "Distribuer",
+    "settings": "Paramètres"
   }
 }

@@ -26,6 +26,7 @@
     "hit": "Hit",
     "stand": "Stand",
     "double": "Double",
-    "deal": "Deal"
+    "deal": "Deal",
+    "settings": "Settings"
   }
 }

@@ -4,6 +4,7 @@ import { GamePhase } from '~/types/game'
 import BmadCard from '~/components/game/BmadCard.vue'
 import CasinoActionButton from '~/components/game/CasinoActionButton.vue'
 import BettingControls from '~/components/game/BettingControls.vue'
+import BalanceBar from '~/components/ui/BalanceBar.vue'
 
 const { t } = useI18n()
 
@@ -47,15 +48,8 @@ const isBettingPhase = computed(() => gameStore.currentPhase === GamePhase.IDLE 
         {{ t('game.error') }}: {{ configStore.error }}
       </div>
 
-      <!-- Zone 1: Balance Bar (40px approx via p-2) -->
-      <header class="flex justify-between items-center p-2 min-h-[40px] bg-black/40">
-        <div class="balance-info text-sm">
-          <span class="text-gold font-bold">{{ t('game.balance') }}:</span> {{ economyStore.balance }} 🪙
-        </div>
-        <div class="level-info text-sm">
-          <span class="text-gold font-bold">{{ t('game.level') }}:</span> {{ economyStore.level }}
-        </div>
-      </header>
+      <!-- Zone 1: Balance Bar (40px) -->
+      <BalanceBar />
 
       <!-- Table Area container spanning remaining height -->
       <main class="flex-grow flex flex-col relative px-4">
