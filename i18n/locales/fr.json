@@ -28,5 +28,17 @@
     "double": "Doubler",
     "deal": "Distribuer",
     "settings": "Paramètres"
+  },
+  "ev": {
+    "positive_feedback": "Excellent choix !",
+    "suboptimal_move": "Mouvement Sous-optimal",
+    "explanation_hit_on_16": "Tirer sur 16 contre une carte faible donne une EV négative par rapport à rester.",
+    "explanation_generic": "Ce n'était pas le meilleur choix mathématique.",
+    "explanation_stand_high": "Rester sur un total élevé est préférable — tirer risque de faire sauter.",
+    "explanation_hit_low": "Avec un total faible, tirer vous donne plus de chances d'améliorer votre main.",
+    "explanation_double_opportunity": "C'était une forte opportunité de doubler avec une EV favorable.",
+    "explanation_hit_recommended": "Tirer aurait donné une meilleure valeur espérée dans cette situation.",
+    "explanation_stand_recommended": "Rester était le jeu mathématiquement optimal ici.",
+    "current_ev": "EV Actuelle : "
   }
 }

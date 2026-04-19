@@ -4,10 +4,14 @@
       'min-w-[48px] min-h-[48px] px-4 py-2 rounded-lg font-bold transition-transform duration-75',
       'flex items-center justify-center',
       'focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2',
-      disabled
+      disabled && !evStatus
         ? 'opacity-50 cursor-not-allowed bg-gray-600 text-gray-300'
-        : 'active:scale-95 hover:brightness-110 cursor-pointer',
-      variantClasses
+        : disabled && evStatus
+          ? 'cursor-not-allowed'
+          : 'active:scale-95 hover:brightness-110 cursor-pointer',
+      variantClasses,
+      evStatus === 'optimal' ? 'ring-4 ring-ev-positive shadow-[0_0_15px_rgba(34,197,94,0.6)] z-10 scale-105' : '',
+      evStatus === 'suboptimal' ? 'ring-4 ring-ev-negative shadow-[0_0_15px_rgba(239,68,68,0.6)] filter brightness-75' : ''
     ]"
     :disabled="disabled"
     :aria-label="label"
@@ -37,6 +41,10 @@ const props = defineProps({
     type: String,
     default: 'primary',
     validator: (value: string) => ['primary', 'secondary', 'danger', 'success'].includes(value)
+  },
+  evStatus: {
+    type: String,
+    default: null
   }
 })
 

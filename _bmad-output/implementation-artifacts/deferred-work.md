@@ -17,3 +17,7 @@
 
 ## Deferred from: code review of 2-1-ev-calculation-engine (2026-04-19)
 - Split EV does not model re-splitting pairs — the current DP calculates one level of splitting only. Proper re-split modeling is out of scope for the basic strategy engine and would require tracking split depth. Address if/when multi-split support is added.
+
+## Deferred from: code review of 2-2-ev-feedback-overlay-decision-celebration (2026-04-19)
+- **Animation confetti en boucle infinie** — `confettiAnimation 1s linear infinite` dans `EVFeedbackOverlay.vue` tourne indéfiniment. Non bloquant car le composant est détruit après 500ms, mais consomme du GPU inutilement si la fenêtre de feedback est allongée.
+- **`useEvEngine()` dans Pinia store scope** — Le composable `useEvEngine()` est appelé à l'intérieur de `defineStore()`. Fonctionne actuellement car SSR est désactivé (`ssr: false`), mais pourrait poser problème si le SSR est réactivé.
