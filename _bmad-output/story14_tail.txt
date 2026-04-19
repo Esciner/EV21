@@ -1,0 +1,32 @@
+﻿
+Running 6 tests using 3 workers
+
+  Ô£ÿ  1 [firefox] ÔÇ║ tests\e2e\story-1-4-action-betting.spec.ts:11:3 ÔÇ║ Story 1.4: Action Buttons & Betting Controls ÔÇ║ Betting Controls UI renders correctly and handles interaction (4.5s)
+  Ô£ô  3 [chromium] ÔÇ║ tests\e2e\story-1-4-action-betting.spec.ts:34:3 ÔÇ║ Story 1.4: Action Buttons & Betting Controls ÔÇ║ Deal starts game and enables Action Buttons (7.5s)
+  Ô£ô  2 [chromium] ÔÇ║ tests\e2e\story-1-4-action-betting.spec.ts:11:3 ÔÇ║ Story 1.4: Action Buttons & Betting Controls ÔÇ║ Betting Controls UI renders correctly and handles interaction (7.8s)
+  Ô£ô  4 [firefox] ÔÇ║ tests\e2e\story-1-4-action-betting.spec.ts:34:3 ÔÇ║ Story 1.4: Action Buttons & Betting Controls ÔÇ║ Deal starts game and enables Action Buttons (12.2s)
+  Ô£ô  5 [webkit] ÔÇ║ tests\e2e\story-1-4-action-betting.spec.ts:11:3 ÔÇ║ Story 1.4: Action Buttons & Betting Controls ÔÇ║ Betting Controls UI renders correctly and handles interaction (9.2s)
+  Ô£ô  6 [webkit] ÔÇ║ tests\e2e\story-1-4-action-betting.spec.ts:34:3 ÔÇ║ Story 1.4: Action Buttons & Betting Controls ÔÇ║ Deal starts game and enables Action Buttons (9.8s)
+
+
+  1) [firefox] ÔÇ║ tests\e2e\story-1-4-action-betting.spec.ts:11:3 ÔÇ║ Story 1.4: Action Buttons & Betting Controls ÔÇ║ Betting Controls UI renders correctly and handles interaction 
+
+    Error: page.goto: NS_ERROR_CONNECTION_REFUSED
+    Call log:
+    [2m  - navigating to "http://localhost:3000/game", waiting until "domcontentloaded"[22m
+
+
+      4 |   test.beforeEach(async ({ page }) => {
+      5 |     // Go to the game and wait for the app to become interactive
+    > 6 |     await page.goto('/game', { waitUntil: 'domcontentloaded' });
+        |                ^
+      7 |     // Config store loading might take a moment
+      8 |     await page.waitForSelector('.balance-info', { timeout: 30000 });
+      9 |   });
+        at C:\Users\Esciner\Documents\test\test-bmad-method\test1\bmad-test\tests\e2e\story-1-4-action-betting.spec.ts:6:16
+
+    Error Context: test-results\story-1-4-action-betting-S-b69b2-tly-and-handles-interaction-firefox\error-context.md
+
+  1 failed
+    [firefox] ÔÇ║ tests\e2e\story-1-4-action-betting.spec.ts:11:3 ÔÇ║ Story 1.4: Action Buttons & Betting Controls ÔÇ║ Betting Controls UI renders correctly and handles interaction 
+  5 passed (40.5s)
