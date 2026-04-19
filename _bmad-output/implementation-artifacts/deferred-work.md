@@ -14,3 +14,6 @@
 ## Deferred from: code review of 1-5-balance-bar-game-chrome (2026-04-19)
 - Hardcoded animation duration [app/components/ui/BalanceBar.vue:14] — duration hardcoded in script vs Tailwind class, pre-existing structural choice.
 - Potential text overlap [app/components/ui/BalanceBar.vue:20] — edge case on ultra-narrow screens without explicit shrink handling.
+
+## Deferred from: code review of 2-1-ev-calculation-engine (2026-04-19)
+- Split EV does not model re-splitting pairs — the current DP calculates one level of splitting only. Proper re-split modeling is out of scope for the basic strategy engine and would require tracking split depth. Address if/when multi-split support is added.

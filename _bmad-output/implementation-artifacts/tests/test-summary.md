@@ -1,21 +1,25 @@
 # Test Automation Summary
 
+## Feature Tested
+Story 2.1: EV Calculation Engine (`useEvEngine.ts`)
+
 ## Generated Tests
 
-### E2E Tests
-- [x] tests/e2e/story-1-5-balance-bar.spec.ts - Balance Bar E2E workflows
+### API / Unit Tests
+- [x] `app/composables/useEvEngine.test.ts` - Mathematical engine unit testing and edge case verification. (Automatically generated during feature development)
 
-## Maintained Tests
-- [x] tests/e2e/game.spec.ts - Fixed DOM selectors
-- [x] tests/e2e/story-1-4-action-betting.spec.ts - Fixed DOM selectors
+### E2E Tests
+*E2E tests are not applicable for this feature, as Story 2.1 focuses entirely on a backend combinatorial calculation engine with no user-facing UI or DOM impact. Integration of this engine into the visible UI will be tested in subsequent E2E flows.*
 
 ## Coverage
-- UI features: Balance Bar rendering, formatting, and DOM consistency.
-- The `BalanceBar` component classes and styling states are covered.
-- Updated previous test suites dealing with the old `<div class="balance-info">` to use the new `<header>` layout.
-- Known issues: Playwright flaky timeouts observed on Firefox/Webkit with Nuxt local server; some tests pass reliably only on Chromium.
+- Unit tests: 11 assertions covering hard totals, soft totals, generic pairs, specific Ace rules, Blackjack EV math, and timing thresholds (<2ms).
+- UI features: N/A 
+
+## Results
+- **Vitest Unit Suite**: 51/51 tests passing across 10 files (including full `useEvEngine` coverage).
+- **Playwright E2E Suite**: Existing regression tests passing successfully. No adverse impact detected from EV Engine integration logic.
 
 ## Next Steps
-- Review Playwright configuration for timeout tolerance during Nuxt cold starts.
-- Integrate risk-based test strategy as needed.
-- Run tests in CI pipeline.
+- Link UI logic in future stories to `useEvEngine` methods and test overall integration visually via Playwright.
+- Run tests regularly in automated CI pipeline.
+- Continue to refine mock coverage if new Blackjack variants are introduced.
