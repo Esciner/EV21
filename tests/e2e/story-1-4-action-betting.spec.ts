@@ -5,7 +5,7 @@ test.describe('Story 1.4: Action Buttons & Betting Controls', () => {
     // Go to the game and wait for the app to become interactive
     await page.goto('/game', { waitUntil: 'domcontentloaded' })
     // Config store loading might take a moment
-    await page.waitForSelector('.balance-info', { timeout: 30000 })
+    await page.waitForSelector('.balance-display', { timeout: 30000 })
   })
 
   test('Betting Controls UI renders correctly and handles interaction', async ({ page }) => {
@@ -39,9 +39,9 @@ test.describe('Story 1.4: Action Buttons & Betting Controls', () => {
     // Assuming the phase moves to DEALING then PLAYER_TURN.
     // If dealer gets blackjack, round might end instantly, but usually we just test the button presence.
     // Let's wait for action buttons to be enabled (meaning it is player turn).
-    const hitBtn = page.getByRole('button', { name: 'Hit' })
-    const standBtn = page.getByRole('button', { name: 'Stand' })
-    const doubleBtn = page.getByRole('button', { name: 'Double' })
+    const hitBtn = page.getByRole('button', { name: /Hit|Tirer/i })
+    const standBtn = page.getByRole('button', { name: /Stand|Rester/i })
+    const doubleBtn = page.getByRole('button', { name: /Double|Doubler/i })
 
     // Wait for the Hit button to be enabled (indicating player turn started)
     await expect(hitBtn).toBeVisible({ timeout: 15000 })

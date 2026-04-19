@@ -4,6 +4,8 @@ import { GamePhase } from '~/types/game'
 import BmadCard from '~/components/game/BmadCard.vue'
 import CasinoActionButton from '~/components/game/CasinoActionButton.vue'
 import BettingControls from '~/components/game/BettingControls.vue'
+import BalanceBar from '~/components/ui/BalanceBar.vue'
+import EVFeedbackOverlay from '~/components/game/EVFeedbackOverlay.vue'
 
 const { t } = useI18n()
 
@@ -42,20 +44,13 @@ const isBettingPhase = computed(() => gameStore.currentPhase === GamePhase.IDLE 
       </div>
       <div
         v-else-if="configStore.error"
-        class="text-error p-4 bg-error/10 border border-error rounded absolute top-0 w-full z-50"
+        class="text-ev-negative p-4 bg-ev-negative/10 border border-ev-negative rounded absolute top-0 w-full z-50"
       >
         {{ t('game.error') }}: {{ configStore.error }}
       </div>
 
-      <!-- Zone 1: Balance Bar (40px approx via p-2) -->
-      <header class="flex justify-between items-center p-2 min-h-[40px] bg-black/40">
-        <div class="balance-info text-sm">
-          <span class="text-gold font-bold">{{ t('game.balance') }}:</span> {{ economyStore.balance }} 🪙
-        </div>
-        <div class="level-info text-sm">
-          <span class="text-gold font-bold">{{ t('game.level') }}:</span> {{ economyStore.level }}
-        </div>
-      </header>
+      <!-- Zone 1: Balance Bar (40px) -->
+      <BalanceBar />
 
       <!-- Table Area container spanning remaining height -->
       <main class="flex-grow flex flex-col relative px-4">
@@ -82,7 +77,7 @@ const isBettingPhase = computed(() => gameStore.currentPhase === GamePhase.IDLE 
             v-if="gameStore.currentPhase === GamePhase.PLAYER_TURN"
             class="bg-black/50 px-4 py-2 rounded-full text-sm font-mono text-gold-light border border-gold/30"
           >
-            Current EV: --
+            {{ $t('ev.current_ev') }}--
           </div>
         </div>
 
@@ -107,11 +102,18 @@ const isBettingPhase = computed(() => gameStore.currentPhase === GamePhase.IDLE 
       <!-- Footer Action & Betting Controls -->
       <div class="footer-area bg-black/60 pt-4 pb-6 px-4">
         <!-- Zone 5: Action Buttons (80px) -->
-        <div class="action-buttons w-full min-h-[80px] flex items-center justify-center gap-2">
+        <div class="action-buttons w-full min-h-[80px] flex items-center justify-center gap-2 relative">
+          <EVFeedbackOverlay
+            :action-type="gameStore.evFeedback"
+            :message="gameStore.evFeedback === 'optimal' ? 'ev.positive_feedback' : ''"
+            :explanation="gameStore.evExplanation"
+            @dismiss-tooltip="gameStore.clearFeedback()"
+          />
           <CasinoActionButton
             :label="t('game.hit') || 'Hit'"
             action="hit"
             :disabled="!isPlayerTurn"
+            :ev-status="gameStore.evFeedbackAction === 'Hit' ? gameStore.evFeedback : null"
             @action="gameStore.hit()"
           />
           <CasinoActionButton
@@ -119,6 +121,7 @@ const isBettingPhase = computed(() => gameStore.currentPhase === GamePhase.IDLE 
             action="stand"
             variant="danger"
             :disabled="!isPlayerTurn"
+            :ev-status="gameStore.evFeedbackAction === 'Stand' ? gameStore.evFeedback : null"
             @action="gameStore.stand()"
           />
           <CasinoActionButton
@@ -126,6 +129,7 @@ const isBettingPhase = computed(() => gameStore.currentPhase === GamePhase.IDLE 
             action="double"
             variant="secondary"
             :disabled="!canDouble"
+            :ev-status="gameStore.evFeedbackAction === 'Double' ? gameStore.evFeedback : null"
             @action="gameStore.double()"
           />
         </div>

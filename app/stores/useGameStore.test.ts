@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest'
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
 import { setActivePinia, createPinia } from 'pinia'
 import { watch } from 'vue'
 import { useGameStore } from './useGameStore'
@@ -45,6 +45,11 @@ vi.mock('../composables/useDeck', () => ({
 describe('useGameStore', () => {
   beforeEach(() => {
     setActivePinia(createPinia())
+    vi.useFakeTimers()
+  })
+
+  afterEach(() => {
+    vi.useRealTimers()
   })
 
   it('initializes with default state', () => {
@@ -101,8 +106,11 @@ describe('useGameStore', () => {
     store.deal()
     // Player: 9♥ + 8♥ = 17
     store.hit()
+    expect(store.currentPhase).toBe(GamePhase.EV_FEEDBACK)
+    expect(store.evFeedbackAction).toBe('Hit')
+    vi.advanceTimersByTime(2500)
+    
     // Player gets 5♠ -> 17 + 5 = 22 -> BUST
-
     expect(store.playerHandCards.length).toBe(3)
     expect(store.playerHand.total).toBe(22)
     expect(store.playerHand.isBust).toBe(true)
@@ -115,6 +123,9 @@ describe('useGameStore', () => {
     store.deal()
     // Player: 17, Dealer: 6♣ + K♦ = 16 -> dealer must hit
     store.stand()
+    expect(store.currentPhase).toBe(GamePhase.EV_FEEDBACK)
+    expect(store.evFeedbackAction).toBe('Stand')
+    vi.advanceTimersByTime(2500)
 
     expect(store.dealerHandCards[1]!.isFaceUp).toBe(true)
     expect(store.currentPhase).toBe(GamePhase.PAYOUT)
@@ -128,6 +139,9 @@ describe('useGameStore', () => {
     store.setBet(100)
     // Player: 9♥ + 8♥ = 17, gets 5♠ -> 22 -> BUST
     store.double()
+    expect(store.currentPhase).toBe(GamePhase.EV_FEEDBACK)
+    expect(store.evFeedbackAction).toBe('Double')
+    vi.advanceTimersByTime(2500)
 
     expect(store.currentBet).toBe(200)
     expect(store.playerHandCards.length).toBe(3)
@@ -142,6 +156,7 @@ describe('useGameStore', () => {
     store.setBet(100)
     store.deal()
     store.stand() // Finish hand -> PAYOUT
+    vi.advanceTimersByTime(2500)
 
     // Deal again from PAYOUT
     store.deal()

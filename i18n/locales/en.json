@@ -26,6 +26,19 @@
     "hit": "Hit",
     "stand": "Stand",
     "double": "Double",
-    "deal": "Deal"
+    "deal": "Deal",
+    "settings": "Settings"
+  },
+  "ev": {
+    "positive_feedback": "Great call!",
+    "suboptimal_move": "Suboptimal Move",
+    "explanation_hit_on_16": "Hitting on 16 against a low card provides negative EV compared to standing.",
+    "explanation_generic": "This was not the best mathematical choice.",
+    "explanation_stand_high": "Standing on a high total is better — hitting risks busting.",
+    "explanation_hit_low": "With a low total, hitting gives you more chances to improve your hand.",
+    "explanation_double_opportunity": "This was a strong doubling opportunity with favorable EV.",
+    "explanation_hit_recommended": "Hitting would have given better expected value in this situation.",
+    "explanation_stand_recommended": "Standing was the mathematically optimal play here.",
+    "current_ev": "Current EV: "
   }
 }

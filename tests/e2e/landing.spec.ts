@@ -11,8 +11,8 @@ test.describe('Landing Page', () => {
   })
 
   test('should navigate to the game page', async ({ page }) => {
-    // Pick the first 'Jouer Maintenant' button visible (Header or Body)
-    await page.getByRole('link', { name: /Jouer/i }).first().click()
-    await expect(page).toHaveURL(/\/game/)
+    // Pick the first Play/Jouer button
+    await page.getByRole('link', { name: /Jouer|Play/i }).first().click()
+    await expect(page).toHaveURL(/.*\/game/)
   })
 })
