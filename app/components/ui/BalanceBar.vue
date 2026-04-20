@@ -31,8 +31,9 @@ onBeforeUnmount(() => {
       role="group"
     >
       <span class="sr-only">{{ $t('game.balance') }}</span>
-      <span aria-hidden="true">{{ economyStore.balance.toLocaleString() }}</span>
-      <UIcon name="i-heroicons-banknotes" class="ml-1" aria-hidden="true" />
+      <ChipStack :balance="economyStore.balance" class="mr-3" />
+      <span aria-hidden="true" class="text-base">{{ economyStore.balance.toLocaleString() }}</span>
+      <UIcon name="i-heroicons-banknotes" class="ml-1 text-lg" aria-hidden="true" />
     </div>
     
     <div class="level-badge flex items-center">
