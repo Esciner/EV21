@@ -5,6 +5,8 @@ import type { Card } from '../types/game'
 import { useDeck } from '../composables/useDeck'
 import { useHandResolver } from '../composables/useHandResolver'
 import { useEvEngine } from '../composables/useEvEngine'
+import { useConfigStore } from './useConfigStore'
+import { useEconomyStore } from './useEconomyStore'
 
 export const useGameStore = defineStore('game', () => {
   const currentPhase = ref(GamePhase.IDLE)
@@ -18,9 +20,14 @@ export const useGameStore = defineStore('game', () => {
   const evExplanation = ref<string>('')
   let feedbackTimeoutId: ReturnType<typeof setTimeout> | null = null
 
+  const evBonusAmount = ref(0)
+  const hasOptimalMove = ref(false)
+
   const deckParams = useDeck()
   const resolver = useHandResolver()
   const evEngine = useEvEngine()
+  const configStore = useConfigStore()
+  const economyStore = useEconomyStore()
 
   const playerHand = computed(() => resolver.calculateHand(playerHandCards.value))
   const dealerHand = computed(() => resolver.calculateHand(dealerHandCards.value))
@@ -49,8 +56,14 @@ export const useGameStore = defineStore('game', () => {
     evExplanation.value = ''
   }
 
+  const resetBonusInfo = () => {
+    evBonusAmount.value = 0
+    hasOptimalMove.value = false
+  }
+
   const resetStore = () => {
     clearFeedback()
+    resetBonusInfo()
     currentPhase.value = GamePhase.IDLE
     resetHand()
     currentBet.value = 0
@@ -60,8 +73,11 @@ export const useGameStore = defineStore('game', () => {
     if (currentPhase.value !== GamePhase.IDLE && currentPhase.value !== GamePhase.PAYOUT) return
 
     resetHand()
-    currentBet.value = 0
     clearFeedback()
+    resetBonusInfo()
+    
+    // Deduct the initial bet
+    economyStore.subtractBalance(currentBet.value)
 
     // Transition through BETTING phase (transient — Story 1-4 will add UI interaction here)
     setPhase(GamePhase.BETTING)
@@ -87,6 +103,28 @@ export const useGameStore = defineStore('game', () => {
     result.value = resolver.computeWinner(playerHand.value, dealerHand.value)
 
     setPhase(GamePhase.PAYOUT)
+    
+    // Process base game payout
+    if (result.value === 'player-blackjack') {
+      // 3:2 payout (returns original bet + 1.5x bet)
+      economyStore.addBalance(currentBet.value * 2.5) 
+    } else if (result.value === 'player-win') {
+      // 1:1 payout (returns original bet + 1x bet)
+      economyStore.addBalance(currentBet.value * 2)
+    } else if (result.value === 'push') {
+      // Return original bet
+      economyStore.addBalance(currentBet.value)
+    }
+    
+    // Process EV bonus payout
+    if (!hasOptimalMove.value) {
+      evBonusAmount.value = 0
+    }
+    
+    evBonusAmount.value = Math.floor(evBonusAmount.value)
+    if (evBonusAmount.value > 0) {
+      economyStore.addBalance(evBonusAmount.value)
+    }
   }
 
   const executeDealerTurn = () => {
@@ -109,17 +147,31 @@ export const useGameStore = defineStore('game', () => {
     const dealerCard = dealerHandCards.value[0]
     if (!dealerCard) return
 
+    const evs = evEngine.computeEV(playerHand.value, dealerCard)
     const optimal = evEngine.getOptimalAction(playerHand.value, dealerCard)
+
+    // Calculate Mathematical Differential EV Bonus for this move
+    let maxEv = -Infinity
+    for (const [key, ev] of Object.entries(evs)) {
+      if (ev !== undefined && ev > maxEv) maxEv = ev
+    }
+    
+    // Split isn't playable yet. If optimal is split, we treat any action as neutral error margin.
+    const actionEv = optimal === 'Split' ? maxEv : (evs[action] ?? 0)
+    const errorMargin = Math.max(0, maxEv - actionEv)
+    
+    // Add base move bonus, subtract mathematical penalty
+    const multiplier = configStore.config?.evBonusMultiplier || 0
+    const perfectBonus = currentBet.value * multiplier
+    const penalty = currentBet.value * errorMargin
+    const moveEarned = perfectBonus - penalty
+    
+    evBonusAmount.value = Math.max(0, evBonusAmount.value + moveEarned)
+
     evFeedbackAction.value = action
 
-    // Split is not playable yet — treat as optimal for any action
-    if (optimal === 'Split') {
-      evFeedback.value = 'optimal'
-      evExplanation.value = ''
-      return
-    }
-
-    if (action === optimal) {
+    if (optimal === 'Split' || errorMargin === 0) {
+      hasOptimalMove.value = true
       evFeedback.value = 'optimal'
       evExplanation.value = ''
     } else {
@@ -182,6 +234,7 @@ export const useGameStore = defineStore('game', () => {
     if (currentPhase.value !== GamePhase.PLAYER_TURN || playerHandCards.value.length !== 2) return
 
     actWithFeedback('Double', () => {
+      economyStore.subtractBalance(currentBet.value)
       currentBet.value *= 2
       playerHandCards.value.push(deckParams.drawCard(true))
 
@@ -202,6 +255,7 @@ export const useGameStore = defineStore('game', () => {
     evFeedbackAction,
     evFeedback,
     evExplanation,
+    evBonusAmount,
     playerHand,
     dealerHand,
     setPhase,

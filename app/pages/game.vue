@@ -6,6 +6,7 @@ import CasinoActionButton from '~/components/game/CasinoActionButton.vue'
 import BettingControls from '~/components/game/BettingControls.vue'
 import BalanceBar from '~/components/ui/BalanceBar.vue'
 import EVFeedbackOverlay from '~/components/game/EVFeedbackOverlay.vue'
+import EVBonusAnimation from '~/components/game/EVBonusAnimation.vue'
 
 const { t } = useI18n()
 
@@ -24,6 +25,14 @@ onMounted(async () => {
 const isPlayerTurn = computed(() => gameStore.currentPhase === GamePhase.PLAYER_TURN)
 const canDouble = computed(() => isPlayerTurn.value && gameStore.playerHandCards.length === 2)
 const isBettingPhase = computed(() => gameStore.currentPhase === GamePhase.IDLE || gameStore.currentPhase === GamePhase.PAYOUT)
+
+const formatPayout = (result: string | null, bet: number) => {
+  if (!result) return '0'
+  if (result === 'player-blackjack') return `+${bet * 1.5}`
+  if (result === 'player-win') return `+${bet}`
+  if (result === 'dealer-win') return `-${bet}`
+  return '0'
+}
 </script>
 
 <template>
@@ -72,12 +81,36 @@ const isBettingPhase = computed(() => gameStore.currentPhase === GamePhase.IDLE 
         </div>
 
         <!-- Zone 3: EV Feedback Zone (60px) fixed height -->
-        <div class="ev-feedback-zone w-full min-h-[60px] flex items-center justify-center">
+        <div class="ev-feedback-zone w-full min-h-[60px] flex items-center justify-center relative">
           <div
             v-if="gameStore.currentPhase === GamePhase.PLAYER_TURN"
             class="bg-black/50 px-4 py-2 rounded-full text-sm font-mono text-gold-light border border-gold/30"
           >
             {{ $t('ev.current_ev') }}--
+          </div>
+
+          <!-- Result & Bonus Overlay during PAYOUT -->
+          <div
+            v-else-if="gameStore.currentPhase === GamePhase.PAYOUT && gameStore.result"
+            class="absolute z-20 flex flex-col items-center justify-center p-3 rounded-xl bg-black/80 border border-gold shadow-[0_0_15px_rgba(212,175,55,0.2)] backdrop-blur-md min-w-[220px]"
+          >
+            <div class="text-xl font-bold uppercase tracking-widest text-ivory mb-2" :class="{'text-gold': ['player-win', 'player-blackjack'].includes(gameStore.result), 'text-ev-negative': gameStore.result === 'dealer-win'}">
+              {{ t(`game.result_${gameStore.result}`) }}
+            </div>
+            
+            <div class="w-full text-sm space-y-1.5 flex flex-col pt-2 border-t border-white/10">
+              <div class="flex justify-between items-center w-full text-ivory/80">
+                <span class="text-xs uppercase tracking-wider">{{ t('game.hand') }}:</span>
+                <span class="font-mono font-bold" :class="{'text-ev-positive': ['player-win', 'player-blackjack'].includes(gameStore.result), 'text-ev-negative': gameStore.result === 'dealer-win'}">
+                  {{ formatPayout(gameStore.result, gameStore.currentBet) }}
+                </span>
+              </div>
+              
+              <div v-if="gameStore.evBonusAmount > 0" class="flex justify-between items-center w-full text-gold">
+                 <span class="text-xs uppercase tracking-wider">{{ t('game.evBonus') }}:</span>
+                 <span class="font-mono font-bold animate-pulse">+{{ gameStore.evBonusAmount }}</span>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -147,6 +180,11 @@ const isBettingPhase = computed(() => gameStore.currentPhase === GamePhase.IDLE 
           />
         </div>
       </div>
+      <!-- Animation Layer -->
+      <EVBonusAnimation
+        v-if="gameStore.currentPhase === GamePhase.PAYOUT && gameStore.evBonusAmount > 0"
+        :amount="gameStore.evBonusAmount"
+      />
     </div>
   </div>
 </template>

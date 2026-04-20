@@ -2,7 +2,7 @@
   "startingBalance": 1000,
   "levelEntryFee": 500,
   "levelUpThreshold": 1500,
-  "evBonusMultiplier": 1.5,
+  "evBonusMultiplier": 0.3,
   "level1AiErrorRate": 0.4,
   "rehabPayoutCap": 500
 }

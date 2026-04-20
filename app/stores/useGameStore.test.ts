@@ -2,6 +2,8 @@ import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
 import { setActivePinia, createPinia } from 'pinia'
 import { watch } from 'vue'
 import { useGameStore } from './useGameStore'
+import { useConfigStore } from './useConfigStore'
+import { useEconomyStore } from './useEconomyStore'
 import { GamePhase } from '../types/game'
 import type { Card } from '../types/game'
 
@@ -158,8 +160,63 @@ describe('useGameStore', () => {
     store.stand() // Finish hand -> PAYOUT
     vi.advanceTimersByTime(2500)
 
-    // Deal again from PAYOUT
+    // Deal again from PAYOUT (new hand started with whatever bet was submitted via setBet right before deal)
     store.deal()
-    expect(store.currentBet).toBe(0)
+    expect(store.currentBet).toBe(100) // Bet must persist through the hand!
+  })
+
+  describe('EV Bonus Currency System', () => {
+    beforeEach(() => {
+      const configStore = useConfigStore()
+      configStore.config = {
+        startingBalance: 1000,
+        levelEntryFee: 0,
+        levelUpThreshold: 10000,
+        evBonusMultiplier: 0.3,
+        level1AiErrorRate: 0,
+        rehabPayoutCap: 200
+      }
+      
+      const economyStore = useEconomyStore()
+      economyStore.balance = 1000
+    })
+
+    it('awards EV bonus on optimal play', () => {
+      const gameStore = useGameStore()
+      const economyStore = useEconomyStore()
+      
+      gameStore.setBet(100)
+      gameStore.deal() // Player 17, dealer 6 up
+      
+      gameStore.stand() 
+      vi.advanceTimersByTime(2500) // Finish feedback and dealer turn
+
+      expect(gameStore.currentPhase).toBe(GamePhase.PAYOUT)
+      expect(gameStore.evBonusAmount).toBe(30) // 100 * 0.3
+    })
+
+    it('calculates differential EV bonus on suboptimal play', () => {
+      const gameStore = useGameStore()
+      const economyStore = useEconomyStore()
+      
+      gameStore.setBet(100)
+      gameStore.deal() // Player 17, dealer 6 up
+      
+      // Hit is severely suboptimal here. Penalty is high enough to reduce EV bonus to 0.
+      gameStore.hit()
+      vi.advanceTimersByTime(2500)
+      
+      expect(gameStore.currentPhase).toBe(GamePhase.PAYOUT)
+      expect(gameStore.evBonusAmount).toBe(0)
+    })
+    
+    it('resets evBonusAmount on new deal', () => {
+      const gameStore = useGameStore()
+      gameStore.evBonusAmount = 50
+      
+      gameStore.deal()
+      
+      expect(gameStore.evBonusAmount).toBe(0)
+    })
   })
 })

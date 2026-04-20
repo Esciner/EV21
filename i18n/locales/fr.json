@@ -27,7 +27,13 @@
     "stand": "Rester",
     "double": "Doubler",
     "deal": "Distribuer",
-    "settings": "Paramètres"
+    "settings": "Paramètres",
+    "hand": "Main",
+    "evBonus": "Bonus EV",
+    "result_player-win": "Vous Gagnez !",
+    "result_dealer-win": "Le Croupier Gagne",
+    "result_push": "Égalité",
+    "result_player-blackjack": "Blackjack !"
   },
   "ev": {
     "positive_feedback": "Excellent choix !",

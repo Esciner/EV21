@@ -27,7 +27,13 @@
     "stand": "Stand",
     "double": "Double",
     "deal": "Deal",
-    "settings": "Settings"
+    "settings": "Settings",
+    "hand": "Hand",
+    "evBonus": "EV Bonus",
+    "result_player-win": "You Win!",
+    "result_dealer-win": "Dealer Wins",
+    "result_push": "Push",
+    "result_player-blackjack": "Blackjack!"
   },
   "ev": {
     "positive_feedback": "Great call!",

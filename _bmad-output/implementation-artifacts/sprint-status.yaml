@@ -1,4 +1,4 @@
-# generated: 2026-04-03T07:42:55+02:00
+﻿# generated: 2026-04-03T07:42:55+02:00
 # last_updated: 2026-04-03T19:19:00+02:00
 # project: bmad-test
 # project_key: NOKEY
@@ -35,7 +35,7 @@
 # - Dev moves story to 'review', then runs code-review (fresh context, different LLM recommended)
 
 generated: "2026-04-03T07:42:55+02:00"
-last_updated: "2026-04-19T16:27:00+02:00"
+last_updated: "2026-04-20T10:18:00+02:00"
 project: bmad-test
 project_key: NOKEY
 tracking_system: file-system
@@ -52,7 +52,7 @@ development_status:
   epic-2: in-progress
   2-1-ev-calculation-engine: done
   2-2-ev-feedback-overlay-decision-celebration: done
-  2-3-ev-bonus-currency-system: backlog
+  2-3-ev-bonus-currency-system: done
   epic-2-retrospective: optional
   epic-3: backlog
   3-1-persistent-balance-localstorage-economy: backlog
@@ -74,3 +74,4 @@ development_status:
   epic-7: backlog
   7-1-end-to-end-config-parameter-validation: backlog
   epic-7-retrospective: optional
+
